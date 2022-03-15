@@ -65,4 +65,3 @@ public class ShoppingCart
 
     public decimal CalculateTotalCost() => _orderCost * (100 -_discountService.DiscountPercentage) / 100 + _shippingCostService.ShippingCost;
 }
-
