@@ -63,6 +63,6 @@ public class ShoppingCart
         _shippingCostService = factory.CreateShippingCostService();
     }
 
-    public decimal CalculateTotalCost() => _orderCost * _discountService.DiscountPercentage / 100 + _shippingCostService.ShippingCost;
+    public decimal CalculateTotalCost() => _orderCost * (100 -_discountService.DiscountPercentage) / 100 + _shippingCostService.ShippingCost;
 }
 
