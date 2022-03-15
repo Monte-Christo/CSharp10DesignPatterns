@@ -50,3 +50,19 @@ public class BelgiumDiscountService : IDiscountService
     public int DiscountPercentage => 20;
 }
 
+public class ShoppingCart
+{
+    private readonly IDiscountService _discountService;
+    private readonly IShippingCostService _shippingCostService;
+
+    private decimal _orderCost = 200;
+
+    public ShoppingCart(IShoppingCartPurchaseFactory factory)
+    {
+        _discountService = factory.CreateDiscountService();
+        _shippingCostService = factory.CreateShippingCostService();
+    }
+
+    public decimal CalculateTotalCost() => _orderCost * _discountService.DiscountPercentage / 100 + _shippingCostService.ShippingCost;
+}
+
