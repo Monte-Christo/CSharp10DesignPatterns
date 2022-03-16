@@ -40,7 +40,6 @@ public class MiniBuilder : CarBuilder
 
     public override void BuildEngine() => Car.AddPart("'not a V8 engine'");
 
-
     public override void BuildFrame() => Car.AddPart("'3-door with stripes'");
 }
 
