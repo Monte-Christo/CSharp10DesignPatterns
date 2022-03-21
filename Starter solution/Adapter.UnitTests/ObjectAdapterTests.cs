@@ -1,8 +1,9 @@
+using ObjectAdapter;
 using Xunit;
 
 namespace Adapter.UnitTests
 {
-    public class AdapterTests
+    public class ObjectAdapterTests
     {
         [Fact]
         public void Test1()

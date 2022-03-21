@@ -1,10 +1,10 @@
-﻿namespace Adapter;
+﻿namespace ObjectAdapter;
 
 public class CityFromExternalSystem
 {
-    public string Name { get; private set; }
-    public string NickName { get; private set; }
-    public int NumberOfInhabitants { get; private set; }
+    public string Name { get; }
+    public string NickName { get; }
+    public int NumberOfInhabitants { get; }
 
     public CityFromExternalSystem(string name, string nickName, int numberOfInhabitants)
     {
@@ -16,7 +16,7 @@ public class CityFromExternalSystem
 
 public class ExternalSystem
 {
-    public CityFromExternalSystem GetCity() => new CityFromExternalSystem("Antwerp", "'t Stad", 500000);
+    public CityFromExternalSystem GetCity() => new("Antwerp", "'t Stad", 500000);
 }
 
 public class City
@@ -38,7 +38,7 @@ public interface ICityAdapter
 
 public class CityAdapter : ICityAdapter
 {
-    public ExternalSystem ExternalSystem { get; private set; } = new();
+    public ExternalSystem ExternalSystem { get; } = new();
 
     public City GetCity()
     {
