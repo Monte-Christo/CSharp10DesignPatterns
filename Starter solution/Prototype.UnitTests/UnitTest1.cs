@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics.Tracing;
 using Xunit;
 
 namespace Prototype.UnitTests;
@@ -15,23 +13,45 @@ public class PrototypeTests
     }
 
     [Fact]
-    public void EmployeeClone_Succeeds()
+    public void EmployeeClone_Shallow_Succeeds()
     {
-        const string OldName = "Cindy";
-        const string NewName = "foo";
+        const string OLD_NAME = "Cindy";
+        const string NEW_NAME = "foo";
 
-        Manager manager = new Manager(OldName);
+        Manager manager = new Manager(OLD_NAME);
         Employee employee = new Employee("EK", manager);
         Employee empClone = employee.Clone();
 
-        Assert.Equal(OldName, employee.Manager.Name);
-        Assert.Equal(OldName, empClone.Manager.Name);
+        Assert.Equal(OLD_NAME, employee.Manager.Name);
+        Assert.Equal(OLD_NAME, empClone.Manager.Name);
         Assert.Equal(empClone.Name, employee.Name);
         Assert.Equal(empClone.Manager, employee.Manager);
 
-        manager.Name = NewName;
+        manager.Name = NEW_NAME;
 
-        Assert.Equal(NewName, employee.Manager.Name);
-        Assert.Equal(NewName, empClone.Manager.Name);
+        Assert.Equal(NEW_NAME, employee.Manager.Name);
+        Assert.Equal(NEW_NAME, empClone.Manager.Name);
     }
+
+    [Fact]
+    public void EmployeeClone_Deep_Succeeds()
+    {
+        const string OLD_NAME = "Cindy";
+        const string NEW_NAME = "foo";
+
+        Manager manager = new Manager(OLD_NAME);
+        Employee employee = new Employee("EK", manager);
+        Employee empClone = employee.Clone(deep: true);
+
+        Assert.Equal(OLD_NAME, employee.Manager.Name);
+        Assert.Equal(OLD_NAME, empClone.Manager.Name);
+        Assert.Equal(empClone.Name, employee.Name);
+        Assert.NotEqual(empClone.Manager, employee.Manager);
+
+        manager.Name = NEW_NAME;
+
+        Assert.Equal(NEW_NAME, employee.Manager.Name);
+        Assert.Equal(OLD_NAME, empClone.Manager.Name);
+    }
+
 }
