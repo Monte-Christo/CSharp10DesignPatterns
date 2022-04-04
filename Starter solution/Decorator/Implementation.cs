@@ -56,7 +56,7 @@ public class StatisticsDecorator : MailServiceDecoratorBase
 
 public class MessageDatabaseDecorator : MailServiceDecoratorBase
 {
-    public List<string> Messages { get; private set; } = new List<string>();
+    public List<string> Messages { get; } = new();
 
     public MessageDatabaseDecorator(IMailService mailService) : base(mailService)
     {
