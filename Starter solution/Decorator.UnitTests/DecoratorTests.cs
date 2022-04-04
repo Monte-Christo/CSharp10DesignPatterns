@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -36,29 +37,43 @@ public class DecoratorTests
         Assert.Equal(expected, _output.ToString());
     }
 
-    [Fact]
-    public void StatisticsDecoratedCloudMailService_WorksCorrectly()
+    [Theory]
+    [InlineData("Test", "Another one", "How about this one?")]
+    public void StatisticsDecoratedCloudMailService_WorksCorrectly(params string[] messages)
     {
         var cloudMailService = new CloudMailService();
         var statisticsCloudMailService = new StatisticsDecorator(cloudMailService);
-        statisticsCloudMailService.SendMail("Test");
 
-        var expected = $"Sending message 'Test' via CloudMailService.{Environment.NewLine}";
+        string expected = string.Empty;
+        foreach (var message in messages)
+        {
+            statisticsCloudMailService.SendMail(message);
+            expected += $"Sending message '{message}' via CloudMailService.{Environment.NewLine}";
+        }
+
         Assert.Equal(expected, _output.ToString());
-        Assert.Equal(1, statisticsCloudMailService.GetSentMessages());
+        Assert.Equal(messages.Length, statisticsCloudMailService.GetSentMessages());
     }
 
-    [Fact]
-    public void DatabaseDecoratedCloudMailService_WorksCorrectly()
+    [Theory]
+    [InlineData("Test", "Another one", "And a third")]
+    public void DatabaseDecoratedCloudMailService_WorksCorrectly(params string[] messages)
     {
         var cloudMailService = new CloudMailService();
         var databaseCloudMailService = new MessageDatabaseDecorator(cloudMailService);
-        var message = "Test";
-        databaseCloudMailService.SendMail(message);
 
-        var expected = $"Sending message '{message}' via CloudMailService.{Environment.NewLine}";
+        string expected = string.Empty;
+        foreach (var message in messages)
+        {
+            databaseCloudMailService.SendMail(message);
+            expected += $"Sending message '{message}' via CloudMailService.{Environment.NewLine}";
+        }
+
         Assert.Equal(expected, _output.ToString());
-        Assert.Equal(message, databaseCloudMailService.Messages.FirstOrDefault());
+        foreach (var message in messages)
+        {
+            Assert.Contains(message, databaseCloudMailService.Messages);
+        }
     }
 
 
