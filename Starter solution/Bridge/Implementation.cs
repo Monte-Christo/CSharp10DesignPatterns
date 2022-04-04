@@ -2,12 +2,12 @@
 
 public abstract class Menu
 {
-    public readonly ICoupon _coupon;
+    protected readonly ICoupon Coupon;
     public abstract int CalculatePrice();
 
-    public Menu(ICoupon coupon)
+    protected Menu(ICoupon coupon)
     {
-        _coupon = coupon;
+        Coupon = coupon;
     }
 }
 
@@ -17,10 +17,7 @@ public class VegetarianMenu : Menu
     {
     }
 
-    public override int CalculatePrice()
-    {
-        return 20 - _coupon.CouponValue;
-    }
+    public override int CalculatePrice() => 20 - Coupon.CouponValue;
 }
 
 public class MeatBasedMenu : Menu
@@ -29,10 +26,7 @@ public class MeatBasedMenu : Menu
     {
     }
 
-    public override int CalculatePrice()
-    {
-        return 30 - _coupon.CouponValue;
-    }
+    public override int CalculatePrice() => 30 - Coupon.CouponValue;
 }
 
 public interface ICoupon
