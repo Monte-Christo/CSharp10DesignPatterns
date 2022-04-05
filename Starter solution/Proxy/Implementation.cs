@@ -11,7 +11,7 @@ public class Document : IDocument
     public string? Content { get; private set; }
     public int AuthorId { get; private set; }
     public DateTimeOffset LastAccessed { get; private set; }
-    private string _fileName;
+    private readonly string _fileName;
 
     public Document(string fileName)
     {
@@ -21,6 +21,7 @@ public class Document : IDocument
 
     private void LoadDocument(string fileName)
     {
+        Console.WriteLine($"Loading document {fileName}");
         Thread.Sleep(1000);
         Title = "An expensive document";
         Content = "Lots of text";
@@ -28,7 +29,7 @@ public class Document : IDocument
         LastAccessed = DateTimeOffset.UtcNow;
     }
 
-    public void DisplayDocument() => Console.WriteLine($"Title: {Title}, Content: {Content}, AuthorId: {AuthorId}");
+    public void DisplayDocument() => Console.WriteLine($"FileName: {_fileName}, Title: {Title}, Content: {Content}, AuthorId: {AuthorId}");
 }
 
 public class DocumentProxy : IDocument
