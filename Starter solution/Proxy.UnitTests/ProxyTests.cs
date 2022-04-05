@@ -30,11 +30,11 @@ public class ProxyTests
     public void DocumentProxy_DisplayDocument_WorksCorrectly()
     {
         var fileName = "MyDocument.pdf";
-        var myDocumentProxy = new DocumentProxy("MyDocument.pdf");
+        var myDocumentProxy = new DocumentProxy(fileName);
         myDocumentProxy.DisplayDocument();
         var expectedText = 
             $"Loading document {fileName}{Environment.NewLine}" + 
-            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+            $"FileName: {fileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
@@ -42,7 +42,7 @@ public class ProxyTests
     public void LazyDocumentProxy_DisplayDocument_WorksCorrectly()
     {
         var fileName = "MyDocument.pdf";
-        var myLazyDocumentProxy = new LazyDocumentProxy("MyDocument.pdf");
+        var myLazyDocumentProxy = new LazyDocumentProxy(fileName);
         myLazyDocumentProxy.DisplayDocument();
         var expectedText = 
             $"Loading document {fileName}{Environment.NewLine}" +
@@ -51,10 +51,10 @@ public class ProxyTests
     }
 
     [Fact]
-    public void ProtectedDocumentProxy_DisplayDocument_WorksCorrectly()
+    public void ProtectedDocumentProxy_DisplayDocumentByViewer_WorksCorrectly()
     {
         var fileName = "MyDocument.pdf";
-        var myProtectedDocumentProxy = new ProtectedDocumentProxy("MyDocument.pdf", "Viewer");
+        var myProtectedDocumentProxy = new ProtectedDocumentProxy(fileName, "Viewer");
         myProtectedDocumentProxy.DisplayDocument();
         var expectedText =
             $"Entering DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}" +
@@ -63,4 +63,13 @@ public class ProxyTests
             $"Exiting DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
+
+    [Fact]
+    public void ProtectedDocumentProxy_DisplayDocumentByOther_Throws()
+    {
+        var myProtectedDocumentProxy = new ProtectedDocumentProxy("MyDocument.pdf", "Other");
+        var exception = Assert.Throws<UnauthorizedAccessException>(() => myProtectedDocumentProxy.DisplayDocument());
+        Assert.Equal("Role 'Other' is not authorized to view this document", exception.Message);
+    }
+
 }
