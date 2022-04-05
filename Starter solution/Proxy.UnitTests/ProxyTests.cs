@@ -20,7 +20,9 @@ public class ProxyTests
         var fileName = "MyDocument.pdf";
         var myDocument = new Document(fileName);
         myDocument.DisplayDocument();
-         var expectedText = $"Loading document {fileName}{Environment.NewLine}" + $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+        var expectedText = 
+            $"Loading document {fileName}{Environment.NewLine}" + 
+            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
@@ -30,7 +32,9 @@ public class ProxyTests
         var fileName = "MyDocument.pdf";
         var myDocumentProxy = new DocumentProxy("MyDocument.pdf");
         myDocumentProxy.DisplayDocument();
-        var expectedText = $"Loading document {fileName}{Environment.NewLine}" + $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+        var expectedText = 
+            $"Loading document {fileName}{Environment.NewLine}" + 
+            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
@@ -40,7 +44,23 @@ public class ProxyTests
         var fileName = "MyDocument.pdf";
         var myLazyDocumentProxy = new LazyDocumentProxy("MyDocument.pdf");
         myLazyDocumentProxy.DisplayDocument();
-        var expectedText = $"Loading document {fileName}{Environment.NewLine}" + $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+        var expectedText = 
+            $"Loading document {fileName}{Environment.NewLine}" +
+            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+        Assert.Equal(expectedText, _output.ToString());
+    }
+
+    [Fact]
+    public void ProtectedDocumentProxy_DisplayDocument_WorksCorrectly()
+    {
+        var fileName = "MyDocument.pdf";
+        var myProtectedDocumentProxy = new ProtectedDocumentProxy("MyDocument.pdf", "Viewer");
+        myProtectedDocumentProxy.DisplayDocument();
+        var expectedText =
+            $"Entering DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}" +
+            $"Loading document {fileName}{Environment.NewLine}" +
+            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}" +
+            $"Exiting DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 }

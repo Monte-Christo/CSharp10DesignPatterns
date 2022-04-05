@@ -64,5 +64,28 @@ public class LazyDocumentProxy : IDocument
     }
 }
 
+public class ProtectedDocumentProxy : IDocument
+{
+    private readonly string _fileName;
+    private readonly string _userRole;
+    private readonly DocumentProxy _documentProxy;
 
+    public ProtectedDocumentProxy(string fileName, string userRole)
+    {
+        _fileName = fileName;
+        _userRole = userRole;
+        _documentProxy = new DocumentProxy(fileName);
+    }
+
+    public void DisplayDocument()
+    {
+        Console.WriteLine($"Entering DisplayDocument in {nameof(ProtectedDocumentProxy)}");
+        if (_userRole != "Viewer")
+        {
+            throw new UnauthorizedAccessException("You are not authorized to view this document");
+        }
+        _documentProxy.DisplayDocument();
+        Console.WriteLine($"Exiting DisplayDocument in {nameof(ProtectedDocumentProxy)}");
+    }
+}
 
