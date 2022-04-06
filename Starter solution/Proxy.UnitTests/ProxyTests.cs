@@ -7,6 +7,7 @@ namespace Proxy.UnitTests;
 public class ProxyTests
 {
     private readonly StringWriter _output;
+    const string FileName = "MyDocument.pdf";
 
     public ProxyTests()
     {
@@ -17,49 +18,45 @@ public class ProxyTests
     [Fact]
     public void RealDocument_DisplayDocument_WorksCorrectly()
     {
-        var fileName = "MyDocument.pdf";
-        var myDocument = new Document(fileName);
+        var myDocument = new Document(FileName);
         myDocument.DisplayDocument();
         var expectedText = 
-            $"Loading document {fileName}{Environment.NewLine}" + 
-            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+            $"Loading document {FileName}{Environment.NewLine}" + 
+            $"FileName: {FileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
     [Fact]
     public void DocumentProxy_DisplayDocument_WorksCorrectly()
     {
-        var fileName = "MyDocument.pdf";
-        var myDocumentProxy = new DocumentProxy(fileName);
+        var myDocumentProxy = new DocumentProxy(FileName);
         myDocumentProxy.DisplayDocument();
         var expectedText = 
-            $"Loading document {fileName}{Environment.NewLine}" + 
-            $"FileName: {fileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+            $"Loading document {FileName}{Environment.NewLine}" + 
+            $"FileName: {FileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
     [Fact]
     public void LazyDocumentProxy_DisplayDocument_WorksCorrectly()
     {
-        var fileName = "MyDocument.pdf";
-        var myLazyDocumentProxy = new LazyDocumentProxy(fileName);
+        var myLazyDocumentProxy = new LazyDocumentProxy(FileName);
         myLazyDocumentProxy.DisplayDocument();
         var expectedText = 
-            $"Loading document {fileName}{Environment.NewLine}" +
-            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
+            $"Loading document {FileName}{Environment.NewLine}" +
+            $"FileName: {FileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
 
     [Fact]
     public void ProtectedDocumentProxy_DisplayDocumentByViewer_WorksCorrectly()
     {
-        var fileName = "MyDocument.pdf";
-        var myProtectedDocumentProxy = new ProtectedDocumentProxy(fileName, "Viewer");
+        var myProtectedDocumentProxy = new ProtectedDocumentProxy(FileName, "Viewer");
         myProtectedDocumentProxy.DisplayDocument();
         var expectedText =
             $"Entering DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}" +
-            $"Loading document {fileName}{Environment.NewLine}" +
-            $"FileName: MyDocument.pdf, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}" +
+            $"Loading document {FileName}{Environment.NewLine}" +
+            $"FileName: {FileName}, Title: An expensive document, Content: Lots of text, AuthorId: 1{Environment.NewLine}" +
             $"Exiting DisplayDocument in ProtectedDocumentProxy{Environment.NewLine}";
         Assert.Equal(expectedText, _output.ToString());
     }
@@ -67,7 +64,7 @@ public class ProxyTests
     [Fact]
     public void ProtectedDocumentProxy_DisplayDocumentByOther_Throws()
     {
-        var myProtectedDocumentProxy = new ProtectedDocumentProxy("MyDocument.pdf", "Other");
+        var myProtectedDocumentProxy = new ProtectedDocumentProxy(FileName, "Other");
         var exception = Assert.Throws<UnauthorizedAccessException>(() => myProtectedDocumentProxy.DisplayDocument());
         Assert.Equal("Role 'Other' is not authorized to view this document", exception.Message);
     }
